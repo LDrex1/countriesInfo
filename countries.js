@@ -68,6 +68,38 @@ function testInput() {
  */
 let ii = 0;
 let storedSearchedData = [];
+
+/**
+ * DOM manipulation...
+ * contains varibles with DOMs stored in them
+ */
+const domManipul = () => {
+  let [country, flag] = storedSearchedData[ii];
+  console.log(ii);
+  let eachCountryData = document.createElement("div");
+  eachCountryData.setAttribute("id", "country-data");
+  let countryNameEl = document.createElement("h2");
+  countryNameEl.setAttribute("id", "country-name");
+  let countryNameDiv = document.createElement("div");
+  countryNameDiv.setAttribute("id", "country-name-div");
+  countryNameEl.textContent = country;
+  countryNameDiv.appendChild(countryNameEl);
+  eachCountryData.appendChild(countryNameDiv);
+  domInput.appendChild(eachCountryData);
+  /**
+   * DOM manipulation...
+   * contains varibles with DOMs stored in them
+   */
+  let flagDiv = document.createElement("div");
+  flagDiv.setAttribute("id", "flag-div");
+  let flagImage = document.createElement("img");
+  flagImage.setAttribute("id", "flag-image");
+  //implementation
+  flagImage.src = flag;
+  flagDiv.appendChild(flagImage);
+  eachCountryData.appendChild(flagDiv);
+};
+
 function dataToPage(content) {
   domInput.innerHTML = "";
   let num = content.currentTarget.param;
@@ -80,34 +112,7 @@ function dataToPage(content) {
       break;
     }
     let [country, flag] = storedSearchedData[ii];
-    /**
-     * DOM manipulation...
-     * contains varibles with DOMs stored in them
-     */
-    const domManipul = () => {
-      let eachCountryData = document.createElement("div");
-      eachCountryData.setAttribute("id", "country-data");
-      let countryNameEl = document.createElement("h2");
-      countryNameEl.setAttribute("id", "country-name");
-      let countryNameDiv = document.createElement("div");
-      countryNameDiv.setAttribute("id", "country-name-div");
-      countryNameEl.textContent = country;
-      countryNameDiv.appendChild(countryNameEl);
-      eachCountryData.appendChild(countryNameDiv);
-      domInput.appendChild(eachCountryData);
-      /**
-       * DOM manipulation...
-       * contains varibles with DOMs stored in them
-       */
-      let flagDiv = document.createElement("div");
-      flagDiv.setAttribute("id", "flag-div");
-      let flagImage = document.createElement("img");
-      flagImage.setAttribute("id", "flag-image");
-      //implementation
-      flagImage.src = flag;
-      flagDiv.appendChild(flagImage);
-      eachCountryData.appendChild(flagDiv);
-    };
+    console.log(ii);
     domManipul();
 
     console.log(country, flag);
@@ -123,7 +128,7 @@ function aaa() {
   fetched
     .then((data) => {
       try {
-        let ii = 0;
+        ii = 0;
         let jj = 0;
 
         console.log(inputToArray);
@@ -133,8 +138,6 @@ function aaa() {
           let matchingCountries = inputToArray.every((element) => {
             return new RegExp(element, "i").test(officalToArray);
           });
-
-          console.log(matchingCountries);
 
           if (matchingCountries) {
             let country = each.official;
