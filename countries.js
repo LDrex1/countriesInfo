@@ -3,15 +3,15 @@
 {countriesList:[....],
      flags:[...]}*/
 //for loops
-let array1 = [{ name: "dami", age: 19 }, { name }];
-
 const url = "https://restcountries.com/v3.1/all";
 let countriesList = [];
 let flags = [];
-const fetchMy = async () => {
+async function fetchMy() {
   const response = await fetch(url);
   const data = await response.json();
+  localStorage.setItem("library", JSON.stringify(data));
   console.log(data);
+  fetchMy.me = data;
   //loop to get an array containing the name of all countries
   for (const each of data) {
     countriesList.push(each.name);
@@ -19,7 +19,7 @@ const fetchMy = async () => {
   }
 
   return { countriesList, flags };
-};
+}
 
 // stored value of the async function fetchMy()
 let fetched = fetchMy();
@@ -30,7 +30,18 @@ let fetched = fetchMy();
  * First one returns the vlaue of the input
  * Second one has an embedded promise
  */
-document.querySelector(".search-button").addEventListener("click", aaa);
+
+function searchBt() {
+  let searchMe = document.querySelector(".search-button");
+  return new Promise(function (resolve, reject) {
+    if (searchMe) {
+      searchMe.addEventListener("click", () => {
+        aaa();
+        resolve("searched with mouse");
+      });
+    }
+  });
+}
 /**
  * DOM manipulation...
  * contains varibles with DOMs stored in them
@@ -39,13 +50,21 @@ document.querySelector(".search-button").addEventListener("click", aaa);
 let pagebuttons = document.querySelector("#page-buttons");
 let domInput = document.querySelector("#fetchedData");
 //our input box
-let searchBox = document.querySelector("#search");
-searchBox.addEventListener("keypress", function (ev) {
-  if (ev.key == "Enter") {
-    ev.preventDefault();
-    aaa();
-  }
-});
+
+function searchEv() {
+  return new Promise(function (resolve, reject) {
+    let searchBox = document.querySelector("#search");
+    if (searchBox)
+      searchBox.addEventListener("keypress", function (ev) {
+        if (ev.key == "Enter") {
+          ev.preventDefault();
+          console.log("aaaaa");
+          aaa();
+          resolve("yhhhh");
+        }
+      });
+  });
+}
 
 //Search input
 function testInput() {
@@ -73,11 +92,37 @@ let storedSearchedData = [];
  * DOM manipulation...
  * contains varibles with DOMs stored in them
  */
+let innerTarget = 0;
+
+const clickEvent = async (e) => {
+  let target = e.currentTarget;
+  innerTarget = target.querySelector("#country-name").textContent;
+  console.log(innerTarget);
+  // output().then((data) => data);
+  window.open("http://127.0.0.1:5500/inner_pages/index.html");
+};
+
+function waitListener(Element, ListenerName) {
+  return new Promise(function (resolve, reject) {
+    const listener = (event) => {
+      event = event.currentTarget;
+      let resultTarget = event.querySelector("#country-name").textContent;
+      console.log(resultTarget);
+      localStorage.clear();
+      localStorage.setItem("selectedCountry", resultTarget);
+      resolve(resultTarget);
+    };
+    Element.forEach((ele) => ele.addEventListener(ListenerName, listener));
+  });
+}
+
 const domManipul = () => {
   let [country, flag] = storedSearchedData[ii];
   console.log(ii);
   let eachCountryData = document.createElement("div");
   eachCountryData.setAttribute("id", "country-data");
+  if (eachCountryData)
+    eachCountryData.addEventListener("click", clickEvent, false);
   let countryNameEl = document.createElement("h2");
   countryNameEl.setAttribute("id", "country-name");
   let countryNameDiv = document.createElement("div");
@@ -99,7 +144,30 @@ const domManipul = () => {
   flagDiv.appendChild(flagImage);
   eachCountryData.appendChild(flagDiv);
 };
+////////////////
 
+console.log(searchBt().then((a) => a));
+console.log(searchEv().then((a) => a));
+
+/*export default*/ async function awaitClicks() {
+  // if ((await searchEv().then((a) => a)) || (await searchBt().then((a) => a))) {
+
+  Promise.any([searchEv(), searchBt()]).then((val) => {
+    val;
+    // fetched.then((val) => val);
+    // console.log(slog);
+    let element = document.querySelectorAll("#country-data");
+    console.log(element[0]);
+    let tempReturn = waitListener(element, "click");
+    console.log("what I am looking for: ", tempReturn);
+    awaitClicks();
+    return tempReturn;
+  });
+}
+
+awaitClicks();
+
+//////////////
 function dataToPage(content) {
   domInput.innerHTML = "";
   let num = content.currentTarget.param;
@@ -119,7 +187,7 @@ function dataToPage(content) {
     ii += 1;
   }
 }
-function aaa() {
+async function aaa() {
   storedSearchedData = [];
   let indexC;
   //converting value of search to an array
@@ -170,7 +238,7 @@ function aaa() {
             let pageNumber = document.createElement("button");
             pageNumber.setAttribute("id", "page-number");
             pageNumber.textContent = jj + 1;
-            pageNumber.addEventListener("click", dataToPage);
+            if (pageNumber) pageNumber.addEventListener("click", dataToPage);
             pageNumber.param = pageNumber.textContent;
             pagebuttons.appendChild(pageNumber);
             jj += 1;
@@ -186,3 +254,5 @@ function aaa() {
     })
     .catch((err) => console.log(err.message));
 }
+
+export default fetchMy;
