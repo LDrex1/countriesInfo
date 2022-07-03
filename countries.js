@@ -99,7 +99,7 @@ const clickEvent = async (e) => {
   innerTarget = target.querySelector("#country-name").textContent;
   console.log(innerTarget);
   // output().then((data) => data);
-  window.open("http://127.0.0.1:5500/inner_pages/index.html");
+  window.open().location = "inner_pages/index.html";
 };
 
 function waitListener(Element, ListenerName) {
