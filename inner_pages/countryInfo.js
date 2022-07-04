@@ -1,13 +1,16 @@
 "use strict";
 // import source from "../countries.js";
-
+// async function mad() {
 let chosen = localStorage.getItem("selectedCountry");
 console.log(chosen);
-const source = JSON.parse(localStorage.getItem("library"));
-
+let source = JSON.parse(localStorage.getItem("library"));
+// }
+console.log(source);
+// mad();
 console.log(localStorage.key(0));
 let data = source.filter((element) => element.name.official == chosen);
 data = data[0];
+console.log(data);
 let currenciesInfo = data.currencies;
 let capitals = data.capital;
 let continent = data.continents;

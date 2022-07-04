@@ -98,8 +98,8 @@ const clickEvent = async (e) => {
   let target = e.currentTarget;
   innerTarget = target.querySelector("#country-name").textContent;
   console.log(innerTarget);
-  // output().then((data) => data);
-  window.open().location = "inner_pages/index.html";
+  await waitListener();
+  // window.open().location = "inner_pages/index.html";
 };
 
 function waitListener(Element, ListenerName) {
@@ -108,9 +108,10 @@ function waitListener(Element, ListenerName) {
       event = event.currentTarget;
       let resultTarget = event.querySelector("#country-name").textContent;
       console.log(resultTarget);
-      localStorage.clear();
+
       localStorage.setItem("selectedCountry", resultTarget);
       resolve(resultTarget);
+      window.open().location = "inner_pages/country.html";
     };
     Element.forEach((ele) => ele.addEventListener(ListenerName, listener));
   });
@@ -255,4 +256,4 @@ async function aaa() {
     .catch((err) => console.log(err.message));
 }
 
-export default fetchMy;
+// export default fetchMy;
