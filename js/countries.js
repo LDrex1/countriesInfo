@@ -102,17 +102,18 @@ const clickEvent = async (e) => {
   // window.open().location = "inner_pages/index.html";
 };
 
+const listener = (event) => {
+  event = event.currentTarget;
+  let resultTarget = event.querySelector("#country-name").textContent;
+  console.log(resultTarget);
+
+  localStorage.setItem("selectedCountry", resultTarget);
+  // resolve(resultTarget);
+  window.open().location = "inner_pages/country.html";
+};
+
 function waitListener(Element, ListenerName) {
   return new Promise(function (resolve, reject) {
-    const listener = (event) => {
-      event = event.currentTarget;
-      let resultTarget = event.querySelector("#country-name").textContent;
-      console.log(resultTarget);
-
-      localStorage.setItem("selectedCountry", resultTarget);
-      resolve(resultTarget);
-      window.open().location = "inner_pages/country.html";
-    };
     Element.forEach((ele) => ele.addEventListener(ListenerName, listener));
   });
 }
@@ -183,6 +184,8 @@ function dataToPage(content) {
     let [country, flag] = storedSearchedData[ii];
     console.log(ii);
     domManipul();
+    let element = document.querySelectorAll("#country-data");
+    element.forEach((ele) => ele.addEventListener("click", listener));
 
     console.log(country, flag);
     ii += 1;
