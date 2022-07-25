@@ -50,6 +50,7 @@ const {
   population,
   name: names,
   borders,
+  area,
 } = data;
 
 const car = data.car.side;
@@ -87,34 +88,77 @@ flagImage.src = flag;
 console.log(flagImage);
 
 let information;
-// `<article>
+
 //   <p></p>
-// </article>`
 
 //paragraph to be injected in the HTML
-information = `${chosen} is located in ${continent} and shares borders with ${
+information = `<p>${chosen} is located in ${continent} and shares borders with ${
   borders.length ? borders.length : "zero"
 } other countries.
 Her capital is ${capitals} with ${currencyName}(${currencySymbol}) as it's official currency. ${chosen} is currently ${
-  unMember ? "not" : null
-} a recognised member of the UN. With a population of ${`${population}`
-  .split("")
-  .reverse()
-  .join("")
-  .replace(/(\d{3})/g, `$1 `)
-  .split("")
-  .reverse()
-  .join("")}, ${chosen} is ${
-  landlocked ? null : "not"
+  unMember ? "" : "not"
+} a recognised member of the UN. With a population of ${spaceNumbers(
+  population
+)}, and an area of ${spaceNumbers(area)}m&sup2 ${chosen} is ${
+  landlocked ? "" : "not"
 } a landlocked country. In this country, the week starts on ${
   weekStart[0].toUpperCase() + weekStart.slice(1)
-} and the driver's seat is on the ${car} hand side of the car`;
-
+} and the driver's seat is on the ${car} hand side of the car</p>`;
+//
 let section_2 = document.querySelector("#section_2");
 let article = section_2.querySelector("article");
 console.log(article);
-article.textContent = information;
+article.innerHTML = information;
 
 const populationPercentage =
   ((population / totalPopulation) * 100).toFixed(3) + "%";
 console.log(populationPercentage);
+
+function spaceNumbers(num) {
+  return `${num}`
+    .split("")
+    .reverse()
+    .join("")
+    .replace(/(\d{3})/g, `$1 `)
+    .split("")
+    .reverse()
+    .join("");
+}
+
+const body = document.querySelector("#root");
+const toggler = document.querySelector(".toggler");
+let lightMode = true;
+const toggleMode = () => {
+  if (lightMode) {
+    body.style.cssText +=
+      ";" +
+      `
+    background: #232424;
+    color: whitesmoke;
+    `;
+    toggler.style.cssText +=
+      ";" +
+      `
+      left: 62%;
+    background: white;
+    `;
+    toggler.parentElement.parentElement.style.background = "black";
+  } else {
+    body.style.cssText +=
+      ";" +
+      `
+      background: #ffffff;
+      color: black;
+      `;
+    toggler.style.cssText +=
+      ";" +
+      `
+      left: 8%;
+      background: #232424;
+      `;
+    toggler.parentElement.parentElement.style.background = "#ffffff";
+  }
+  lightMode = !lightMode;
+};
+
+toggleMode ? toggler.parentElement.addEventListener("click", toggleMode) : null;
