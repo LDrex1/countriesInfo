@@ -19,7 +19,7 @@ let allLanguages = source.map((country) => {
 //getting all languages (no subarrays)
 allLanguages = [].concat(...allLanguages);
 
-//all languages Object
+//all languages Object with count
 let popularLanguages = allLanguages.reduce((acc, cur) => {
   return { ...acc, [cur]: acc[cur] + 1 || 1 };
 }, {});
@@ -110,10 +110,31 @@ let article = section_2.querySelector("article");
 console.log(article);
 article.innerHTML = information;
 
+let majorChars = `
+<div>
+  <ul>
+    <li>Capital(s):<span>${capitals}</span></li>
+    <li>Area:<span>${area}</span></li>
+    <li>Continent:<span>${continent}</span></li>
+    <li>Population:<span>${population}</span></li>
+    <li>Currency:<span>${currencySymbol} (${currencySymbol})</span></li>
+    <li>Weekstart:<span>${weekStart}</span></li>
+    <li>Driver's side:<span>${car}</span></li>
+    <li>Landlocked:<span>${landlocked ? "Yes" : "No"}</span></li>
+    <li>Independent:<span>${independent ? "Yes" : "No"}</span></li>
+    <li>UN Member:<span>${unMember ? "Yes" : "No"}</span></li>
+  </ul>
+</div>`;
+
 const populationPercentage =
   ((population / totalPopulation) * 100).toFixed(3) + "%";
 console.log(populationPercentage);
 
+/**
+ *
+ * @param {*} num
+ * @returns well written figure with spaces
+ */
 function spaceNumbers(num) {
   return `${num}`
     .split("")
@@ -125,9 +146,19 @@ function spaceNumbers(num) {
     .join("");
 }
 
+/**
+ * References to document object for DOM
+ */
 const body = document.querySelector("#root");
 const toggler = document.querySelector(".toggler");
+const infoDiv = document.querySelector("#info-banner");
+
+//default lightmode
 let lightMode = true;
+
+/**
+ * function for lightmode toggler
+ */
 const toggleMode = () => {
   if (lightMode) {
     body.style.cssText +=
@@ -161,4 +192,16 @@ const toggleMode = () => {
   lightMode = !lightMode;
 };
 
+//adding eventlistener for the reference to the toggler selector in DO
 toggleMode ? toggler.parentElement.addEventListener("click", toggleMode) : null;
+
+infoDiv.innerHTML = majorChars;
+function toggleInfo(ev) {
+  ev.preventDefault();
+  console.log(ev.offsetX);
+  infoDiv.style.display === "block"
+    ? (infoDiv.style.display = "none")
+    : (infoDiv.style.display = "block");
+}
+
+document.querySelector("#toggle-info").addEventListener("click", toggleInfo);
