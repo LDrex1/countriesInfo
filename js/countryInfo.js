@@ -155,18 +155,15 @@ const infoDiv = document.querySelector("#info-banner");
 
 //default lightmode
 let lightMode = true;
-
 /**
  * function for lightmode toggler
  */
 const toggleMode = () => {
+  let background, color;
+
   if (lightMode) {
-    body.style.cssText +=
-      ";" +
-      `
-    background: #232424;
-    color: whitesmoke;
-    `;
+    background = "#232424";
+    color = "whitesmoke";
     toggler.style.cssText +=
       ";" +
       `
@@ -175,12 +172,8 @@ const toggleMode = () => {
     `;
     toggler.parentElement.parentElement.style.background = "black";
   } else {
-    body.style.cssText +=
-      ";" +
-      `
-      background: #ffffff;
-      color: black;
-      `;
+    background = "#ffffff";
+    color = "black";
     toggler.style.cssText +=
       ";" +
       `
@@ -189,7 +182,36 @@ const toggleMode = () => {
       `;
     toggler.parentElement.parentElement.style.background = "#ffffff";
   }
+  body.style.cssText +=
+    ";" +
+    `
+      background: ${background};
+      color: ${color};
+    `;
+
+  infoDiv.style.cssText +=
+    ";" +
+    `
+      background: ${background};
+      color: ${color};
+    `;
   lightMode = !lightMode;
+};
+
+const hideBanner = (ev) => {
+  ev.preventDefault();
+  if (!ev.target.closest("#info-banner") || ev.key === "Escape") {
+    infoDiv.style.display = "none";
+    document
+      .querySelectorAll("p")
+      .forEach(
+        (pTag) =>
+          (pTag.style.cssText += ";" + `color: inherit; text-shadow: none;`)
+      );
+    ["click", "keyup"].forEach((listener) =>
+      document.removeEventListener(listener, hideBanner)
+    );
+  }
 };
 
 //adding eventlistener for the reference to the toggler selector in DO
@@ -198,10 +220,25 @@ toggleMode ? toggler.parentElement.addEventListener("click", toggleMode) : null;
 infoDiv.innerHTML = majorChars;
 function toggleInfo(ev) {
   ev.preventDefault();
-  console.log(ev.offsetX);
-  infoDiv.style.display === "block"
-    ? (infoDiv.style.display = "none")
-    : (infoDiv.style.display = "block");
+  if (!(infoDiv.style.display === "flex")) {
+    console.log("shown");
+    infoDiv.style.display = "flex";
+    document
+      .querySelectorAll("p")
+      .forEach(
+        (pTag) =>
+          (pTag.style.cssText +=
+            ";" + `color:transparent; text-shadow: 0 0 5px #000;`)
+      );
+
+    setTimeout(
+      () =>
+        ["click", "keyup"].forEach((listener) =>
+          document.addEventListener(listener, hideBanner)
+        ),
+      0
+    );
+  }
 }
 
 document.querySelector("#toggle-info").addEventListener("click", toggleInfo);
