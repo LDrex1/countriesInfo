@@ -5,6 +5,7 @@
 }
 
 body {
+  /* position: relative; */
   transition: background 500ms ease-in;
   transition: all 300ms ease-in;
 }
@@ -102,6 +103,29 @@ section.section-2 {
 
 #info-banner {
   display: none;
+  background-color: white;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 4vh 7vw;
+  border: 2px solid white;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: auto;
+}
+
+#info-banner span {
+  margin-left: 2vw;
+}
+#info-banner ul li {
+  margin-bottom: 10px;
+}
+
+footer {
+  margin-top: 5vh;
 }
 
 @media screen and (min-width: 992px) {
@@ -118,5 +142,9 @@ section.section-2 {
     width: 75%;
     padding-left: 1.3rem;
     padding-right: 1.3rem;
+  }
+
+  footer {
+    margin-top: 10vh;
   }
 }
