@@ -99,7 +99,6 @@ const clickEvent = async (e) => {
   innerTarget = target.querySelector("#country-name").textContent;
   console.log(innerTarget);
   await waitListener();
-  // window.open().location = "inner_pages/index.html";
 };
 
 const listener = (event) => {
@@ -114,7 +113,9 @@ const listener = (event) => {
 
 function waitListener(Element, ListenerName) {
   return new Promise(function (resolve, reject) {
-    Element.forEach((ele) => ele.addEventListener(ListenerName, listener));
+    Element.forEach((ele) => {
+      if (ele) ele.addEventListener(ListenerName, listener);
+    });
   });
 }
 
@@ -148,16 +149,8 @@ const domManipul = () => {
 };
 ////////////////
 
-console.log(searchBt().then((a) => a));
-console.log(searchEv().then((a) => a));
-
 /*export default*/ async function awaitClicks() {
-  // if ((await searchEv().then((a) => a)) || (await searchBt().then((a) => a))) {
-
   Promise.any([searchEv(), searchBt()]).then((val) => {
-    val;
-    // fetched.then((val) => val);
-    // console.log(slog);
     let element = document.querySelectorAll("#country-data");
     console.log(element[0]);
     let tempReturn = waitListener(element, "click");
@@ -206,13 +199,13 @@ async function aaa() {
         console.log(inputToArray);
         domInput.innerHTML = "";
         for (const each of data.countriesList) {
-          let officalToArray = each.official.split("");
+          let officalToArray = each.common.split("");
           let matchingCountries = inputToArray.every((element) => {
             return new RegExp(element, "i").test(officalToArray);
           });
 
           if (matchingCountries) {
-            let country = each.official;
+            let country = each.common;
             indexC = data.countriesList.indexOf(each);
             let flag = data.flags[indexC].png;
             let subStoredData = [];
