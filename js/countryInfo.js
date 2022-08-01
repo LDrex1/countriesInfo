@@ -36,7 +36,7 @@ console.log(popularLanguages);
 //Working on Individual Country
 console.log(localStorage.key(0));
 //Using filter to return the data of the chosen country
-let data = source.filter((element) => element.name.official == chosen);
+let data = source.filter((element) => element.name.common == chosen);
 data = data[0];
 console.log(data);
 const {
@@ -81,7 +81,7 @@ console.log(dataArray);
 
 //variables needed for DOM manipulation
 let section_1 = document.querySelector("#section_1");
-section_1.querySelector(".country-name").textContent = chosen;
+section_1.querySelector(".country-name").textContent = names.official;
 let flagImage = section_1.querySelector(".country-flag").querySelector("img");
 
 flagImage.src = flag;
@@ -201,7 +201,16 @@ const toggleMode = () => {
 const hideBanner = (ev) => {
   ev.preventDefault();
   if (!ev.target.closest("#info-banner") || ev.key === "Escape") {
-    infoDiv.style.display = "none";
+    // infoDiv.style.display = "none";
+    infoDiv.style.cssText +=
+      ";" +
+      `
+    opacity: 0;
+    padding: 0;
+    max-height: 0;
+    max-width: 0
+    `;
+
     document
       .querySelectorAll("p")
       .forEach(
@@ -220,9 +229,19 @@ toggleMode ? toggler.parentElement.addEventListener("click", toggleMode) : null;
 infoDiv.innerHTML = majorChars;
 function toggleInfo(ev) {
   ev.preventDefault();
-  if (!(infoDiv.style.display === "flex")) {
+  // if (!(infoDiv.style.display === "flex")) {
+  if (!(infoDiv.style["max-height"] === "0")) {
     console.log("shown");
-    infoDiv.style.display = "flex";
+    // infoDiv.style.display = "flex";
+    infoDiv.style.cssText +=
+      ";" +
+      `
+    opacity: 1;
+    padding: 4vh 7vw;
+    max-height: 400px;
+    max-width: 400px
+    `;
+
     document
       .querySelectorAll("p")
       .forEach(

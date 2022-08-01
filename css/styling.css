@@ -22,6 +22,10 @@ p {
   font-size: 1.2rem;
 }
 
+a {
+  color: inherit;
+}
+
 .m-auto {
   margin: auto;
 }
@@ -86,6 +90,10 @@ section.section-1 {
   padding-top: 1rem;
 }
 
+section.section-1 :last-child {
+  margin-top: calc(5px + 0.8vw);
+}
+
 .country-flag {
   width: 20vw;
   aspect-ratio: 1.4;
@@ -98,11 +106,14 @@ section.section-1 {
 }
 
 section.section-2 {
+  margin-top: 15px;
   padding-bottom: 2rem;
 }
 
 #info-banner {
-  display: none;
+  opacity: 0;
+  display: flex;
+  /* display: none; */
   background-color: white;
   flex-direction: column;
   justify-content: center;
@@ -115,6 +126,7 @@ section.section-2 {
   left: 50%;
   transform: translateX(-50%);
   margin: auto;
+  transition: all 800ms ease-out;
 }
 
 #info-banner span {
@@ -142,6 +154,10 @@ footer {
     width: 75%;
     padding-left: 1.3rem;
     padding-right: 1.3rem;
+  }
+
+  section.section-2 {
+    margin-top: 30px;
   }
 
   footer {
