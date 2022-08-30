@@ -26,6 +26,19 @@ a {
   color: inherit;
 }
 
+button {
+  color: inherit;
+}
+
+form {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  column-gap: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
 .m-auto {
   margin: auto;
 }
