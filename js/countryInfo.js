@@ -201,7 +201,6 @@ const toggleMode = () => {
 const hideBanner = (ev) => {
   ev.preventDefault();
   if (!ev.target.closest("#info-banner") || ev.key === "Escape") {
-    // infoDiv.style.display = "none";
     infoDiv.style.cssText +=
       ";" +
       `
