@@ -55,7 +55,7 @@ section h3 {
   flex-wrap: wrap;
   flex: 1;
   column-gap: 3vw;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: stretch;
 }
 
@@ -97,4 +97,10 @@ section h3 {
   display: flex;
   justify-content: flex-start;
   column-gap: 1vw;
+}
+
+@media screen and (min-width: 690px) {
+  #fetchedData {
+    justify-content: space-between;
+  }
 }
