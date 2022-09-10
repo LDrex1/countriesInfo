@@ -61,7 +61,7 @@ section h3 {
 
 #country-data {
   width: 300px;
-  margin-bottom: calc(10px + 0.8vw);
+  margin-bottom: calc(18px + 0.8vw);
   height: 200px;
   overflow: hidden;
   border: 1px solid #1f307c;
