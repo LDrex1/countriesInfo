@@ -6,17 +6,26 @@
 const url = "https://restcountries.com/v3.1/all";
 let countriesList = [];
 let flags = [];
+let continents = [];
+const optgroup = document.getElementById("optgroup");
 async function fetchMy() {
   const response = await fetch(url);
   const data = await response.json();
   localStorage.setItem("library", JSON.stringify(data));
-  console.log(data);
   fetchMy.me = data;
   //loop to get an array containing the name of all countries
   for (const each of data) {
     countriesList.push(each.name);
     flags.push(each.flags);
+    continents.push(...each.continents);
   }
+
+  continents = [...new Set(continents)];
+  continents.forEach((continent) => {
+    const option = document.createElement("option");
+    option.value = continent && (option.textContent = continent);
+    optgroup.appendChild(option);
+  });
 
   return { countriesList, flags };
 }
@@ -47,8 +56,10 @@ function searchBt() {
  * contains varibles with DOMs stored in them
  */
 //parent that'd contain all our newly created elements
-let pagebuttons = document.querySelector("#page-buttons");
-let domInput = document.querySelector("#fetchedData");
+const pagebuttons = document.querySelector("#page-buttons");
+const domInput = document.querySelector("#fetchedData");
+const continent = document.querySelector("#continent");
+
 //our input box
 
 function searchEv() {
@@ -58,7 +69,6 @@ function searchEv() {
       searchBox.addEventListener("keypress", function (ev) {
         if (ev.key == "Enter") {
           ev.preventDefault();
-          console.log("aaaaa");
           aaa();
           resolve("yhhhh");
         }
@@ -69,7 +79,6 @@ function searchEv() {
 //Search input
 function testInput() {
   while (pagebuttons.firstChild) {
-    console.log("true");
     document.getElementById("page-number").remove();
   }
   let search = document.querySelector("#search").value;
@@ -97,14 +106,12 @@ let innerTarget = 0;
 const clickEvent = async (e) => {
   let target = e.currentTarget;
   innerTarget = target.querySelector("#country-name").textContent;
-  console.log(innerTarget);
   await waitListener();
 };
 
 const listener = (event) => {
   event = event.currentTarget;
   let resultTarget = event.querySelector("#country-name").textContent;
-  console.log(resultTarget);
 
   localStorage.setItem("selectedCountry", resultTarget);
   // resolve(resultTarget);
@@ -121,7 +128,6 @@ function waitListener(Element, ListenerName) {
 
 const domManipul = () => {
   let [country, flag] = storedSearchedData[ii];
-  console.log(ii);
   let eachCountryData = document.createElement("div");
   eachCountryData.setAttribute("id", "country-data");
   if (eachCountryData)
@@ -152,9 +158,7 @@ const domManipul = () => {
 /*export default*/ async function awaitClicks() {
   Promise.any([searchEv(), searchBt()]).then((val) => {
     let element = document.querySelectorAll("#country-data");
-    console.log(element[0]);
     let tempReturn = waitListener(element, "click");
-    console.log("what I am looking for: ", tempReturn);
     awaitClicks();
     return tempReturn;
   });
@@ -175,12 +179,10 @@ function dataToPage(content) {
       break;
     }
     let [country, flag] = storedSearchedData[ii];
-    console.log(ii);
     domManipul();
     let element = document.querySelectorAll("#country-data");
     element.forEach((ele) => ele.addEventListener("click", listener));
 
-    console.log(country, flag);
     ii += 1;
   }
 }
@@ -188,25 +190,39 @@ async function aaa() {
   storedSearchedData = [];
   let indexC;
   //converting value of search to an array
-  let inputToArray = testInput().split("");
+  let inputToArray = testInput().split(" ");
 
   fetched
     .then((data) => {
       try {
         ii = 0;
         let jj = 0;
-
-        console.log(inputToArray);
+        let defaultName = data.countriesList.reduce((acc, { common }) => {
+          return [...acc, common];
+        }, []);
+        let commonName;
+        if (continent.value) {
+          commonName = JSON.parse(localStorage.getItem("library"))
+            .filter(({ continents }) => {
+              return continents.includes(continent.value);
+            })
+            .reduce((acc, { name }) => {
+              return [...acc, name.common];
+            }, []);
+        } else {
+          commonName = defaultName;
+        }
+        const commonNameSorted = [...commonName].sort();
         domInput.innerHTML = "";
-        for (const each of data.countriesList) {
-          let officalToArray = each.common.split("");
+        for (const each of commonNameSorted) {
+          let commonToArray = each.split(" ");
           let matchingCountries = inputToArray.every((element) => {
-            return new RegExp(element, "i").test(officalToArray);
+            return new RegExp(element, "i").test(commonToArray);
           });
 
           if (matchingCountries) {
-            let country = each.common;
-            indexC = data.countriesList.indexOf(each);
+            let country = each;
+            indexC = defaultName.indexOf(each);
             let flag = data.flags[indexC].png;
             let subStoredData = [];
             subStoredData.push(country);
@@ -225,11 +241,8 @@ async function aaa() {
           ii += 1;
         }
 
-        console.log(storedSearchedData, storedSearchedData.length);
         if (storedSearchedData.length > 12) {
           let numberOfPages = Math.ceil(storedSearchedData.length / 12);
-          console.log(storedSearchedData.length);
-          console.log(jj, numberOfPages);
 
           while (jj < numberOfPages) {
             let pageNumber = document.createElement("button");
@@ -239,11 +252,8 @@ async function aaa() {
             pageNumber.param = pageNumber.textContent;
             pagebuttons.appendChild(pageNumber);
             jj += 1;
-            console.log(jj, pageNumber.textContent, numberOfPages);
           }
         }
-
-        console.log(storedSearchedData.length);
       } catch (err) {
         console.error(err.message);
         throw err;
