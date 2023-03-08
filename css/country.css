@@ -14,6 +14,13 @@ button {
   padding: 3px;
 }
 
+select {
+  margin-top: 4px;
+  font-size: 17px;
+  color: #3349a9;
+  padding: 2px 2px;
+}
+
 input#search {
   margin-top: 4px;
   font-size: 18px;
@@ -23,6 +30,12 @@ input#search {
 
 input#search:focus {
   background: #d9e1e9;
+}
+
+.search-button {
+  margin-top: 10px;
+  border: none;
+  padding: 5px;
 }
 
 section {
@@ -94,21 +107,18 @@ section h3 {
 }
 
 #page-buttons {
-  display: flex;
-  justify-content: flex-start;
-  column-gap: 1vw;
-}
-
-#page-buttons {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   row-gap: 10px;
+  column-gap: 1vw;
+  padding-bottom: 30px;
 }
 
 #page-buttons button {
-  width: 30px;
+  border-radius: 5px;
+  width: 35px;
   background: #212126;
   color: #a4aed8;
   text-shadow: 0.1px 0.1px whitesmoke;
