@@ -13,6 +13,14 @@
       <h3>Please input the Country you want to search for below</h3>
       <form action="">
         <input type="search" id="search" width="20vw" />
+        <select name="Continent" id="continent">
+          <optgroup id="optgroup">
+            <option value="" aria-disabled="true" disabled selected>
+              Choose Continent
+            </option>
+          </optgroup>
+        </select>
+        <br />
         <button type="button" class="search-button">Search</button>
       </form>
       <div id="fetchedData"></div>
